@@ -1,0 +1,450 @@
+; Constants and state file.
+; There are comments scattered through this file, so you may like to
+; take a look if would like to learn more about the cns.
+
+[Data]
+life = 1500			;Amount of life to start with
+power = 3000		;Amount of maximum power
+attack = 110		;attack power (more is stronger)
+defence = 110		;defensive power (more is stronger)
+fall.defence_up = 50	;Percentage to increase defense everytime player is knocked down
+liedown.time = 60		;Time which player lies down for, before getting up
+airjuggle = 15		;Number of points for juggling
+sparkno = 2			;Default hit spark number for HitDefs
+guard.sparkno = 40	;Default guard spark number
+KO.echo = 0			;1 to enable echo on KO
+volume = 0			;Volume offset (negative for softer)
+IntPersistIndex = 60	;Variables with this index and above will not have their values
+FloatPersistIndex = 40  ;reset to 0 between rounds or matches. There are 60 int variables,
+  				;indexed from 0 to 59, and 40 float variables, indexed from 0 to 39.
+  				;If omitted, then it defaults to 60 and 40 for integer and float
+  				;variables repectively, meaning that none are persistent, i.e. all
+  				;are reset. If you want your variables to persist between matches,
+  				;you need to override state 5900 from common1.cns.
+
+
+[Size]
+xscale = 1			;Horizontal scaling factor.
+yscale = 1			;Vertical scaling factor.
+ground.back = 15		;Player width (back, ground)
+ground.front = 16		;Player width (front, ground)
+air.back = 12		;Player width (back, air)
+air.front = 12		;Player width (front, air)
+height = 60			;Height of player (for opponent to jump over)
+attack.dist = 160		;Default attack distance
+proj.attack.dist = 90	;Default attack distance for projectiles
+proj.doscale = 0		;Set to 1 to scale projectiles too   
+head.pos = -5, -90	;Approximate position of head
+mid.pos = -5, -60		;Approximate position of midsection
+shadowoffset = 0		;Number of pixels to vertically offset the shadow
+draw.offset = 0,0		;Player drawing offset in pixels (x, y)
+
+[Velocity]
+walk.fwd  = 3.5
+walk.back = -3.5
+run.fwd  = 0
+run.back = 0
+jump.neu = 0,-11
+jump.back = -3.5
+jump.fwd = 3.5
+runjump.back = 0
+runjump.fwd = 0
+airjump.neu = 0
+airjump.back = 0
+airjump.fwd = 0
+
+[Movement]
+airjump.num = 0
+airjump.height = 35
+yaccel = .8
+stand.friction = .85
+crouch.friction = .82
+;---------------------------------------------------------------------------
+; Lose by Time Over
+; CNS difficulty: basic
+[Statedef 170]
+type = S
+ctrl = 0
+anim = 170
+velset = 0,0
+
+[State 170, 1]
+type = NotHitBy
+trigger1 = 1
+value = SCA
+time = 1
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = animelem = 1
+value = S0,2
+;---------------------------------------------------------------------------
+; Win state decider
+; CNS difficulty: basic
+[Statedef 180]
+type = S
+
+[State 180, 1]
+type = ChangeState
+trigger1 = Time = 0
+value = 181
+
+;===============================================================================
+; Pose Ganadora:
+;-------------------------------------------------------------------------------
+[Statedef 181]
+type = S
+ctrl = 0
+anim = 180
+velset = 0,0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = animelem = 1
+value = S0,0
+
+[State 181, 1]
+type = NotHitBy
+trigger1 = 1
+value = SCA
+time = 1
+
+;---------------------------------------------------------------------------
+; Introduction
+; CNS difficulty: basic
+[Statedef 190]
+type = S
+ctrl = 0
+anim = 190
+velset = 0,0
+
+[State 0, PlaySnd]
+type = PlaySnd
+triggerall = stateno = 190
+trigger1 = time = 5
+value = S0,1
+channel = 37
+
+[State 190, 1] ;Freeze animation until PreIntro is over
+type = ChangeAnim
+trigger1 = RoundState = 0
+value = 190
+
+[State 190, 2] ;Assert this until you want "round 1, fight" to begin
+type = AssertSpecial
+trigger1 = 1
+flag = Intro
+
+[State 190, 4] ;Change to stand state
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+;===============================================================================
+[StateDef -3]
+;===============================================================================
+; INTERFAZ:
+;---------------------------------------------------------------------------
+; Sacar Interfaz P1
+[State 0, Helper]
+type = Helper
+triggerall = teamside = 1
+triggerall = numhelper(3500) = 0
+triggerall = numhelper(3550) = 0
+trigger1 = command = "s"
+helpertype = normal
+name = "Interfaz"
+ID = 3500
+stateno = 3500
+pos = 0,-100
+postype = left
+facing = 1
+keyctrl = 0
+ownpal = 1
+
+;---------------------------------------------------------------------------
+; Meter Interfaz P1
+[State 0, Helper]
+type = Helper
+triggerall = teamside = 1
+triggerall = numhelper(3500) = 1 && numhelper(3501) = 1
+triggerall = numhelper(3550) = 0
+trigger1 = command = "s"
+helpertype = normal
+name = "Interfaz"
+ID = 3550
+stateno = 3550
+pos = 0,-100
+postype = left
+facing = 1
+keyctrl = 0
+ownpal = 1
+
+;---------------------------------------------------------------------------
+; Sacar Interfaz P2
+[State 0, Helper]
+type = Helper
+triggerall = teamside = 2
+triggerall = numhelper(3500) = 0
+triggerall = numhelper(3550) = 0
+trigger1 = command = "s"
+helpertype = normal
+name = "Interfaz"
+ID = 3500
+stateno = 3510
+pos = 0,-100
+postype = left
+facing = 1
+keyctrl = 0
+ownpal = 1
+
+;---------------------------------------------------------------------------
+; Meter Interfaz P2
+[State 0, Helper]
+type = Helper
+triggerall = teamside = 2
+triggerall = numhelper(3500) = 1 && numhelper(3501) = 1
+triggerall = numhelper(3550) = 0
+trigger1 = command = "s"
+helpertype = normal
+name = "Interfaz"
+ID = 3550
+stateno = 3560
+pos = 0,-100
+postype = left
+facing = 1
+keyctrl = 0
+ownpal = 1
+;===============================================================================
+; ANULAR AFTERIMAGE:
+;-------------------------------------------------------------------------------
+[State -3, VarSet - ANULAR AFTERIMAGE]
+type = VarSet
+trigger1 = numhelper(9999999999) = 1
+v = 5
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = fvar(3) < 0
+fv = 3    
+value = 0
+
+[State -3, VarSet - afterimage]
+type = VarSet
+trigger1 = fvar(3) = 0
+v = 5
+value = 0
+
+[State 0, AfterImage]
+type = AfterImage
+triggerall = var(5) = 1
+trigger1 = time = 1
+time = 1000
+length = 4
+palcolor = 256
+palinvertall = 0
+palbright = 30,30,30
+palcontrast = 120,120,220
+palpostbright = 0,0,0
+paladd = 60,60,60
+palmul = .65,.65,.75
+timegap = 1
+framegap = 1
+trans = add
+
+[State 0, AfterImage]
+type = AfterImage
+triggerall = var(5) = 0
+trigger1 = time = 1
+time = 0
+length = 0
+palcolor = 256
+palinvertall = 0
+palbright = 30,30,30
+palcontrast = 120,120,220
+palpostbright = 0,0,0
+paladd = 60,60,60
+palmul = .65,.65,.75
+timegap = 1
+framegap = 1
+trans = add
+;===============================================================================
+; MODO CUCHILLO Y ARMAS:
+;-------------------------------------------------------------------------------
+; Cuchillo
+[State -3, Turn]
+type = ChangeAnim
+trigger1 = var(2) = 1
+trigger1 = anim = 5
+value = 1005
+
+[State -3, VarSet, Golpeado]
+type = VarSet
+trigger1 = var(2) = 1
+v = 10
+value = 0
+
+[State -3, VarSet,Golpeado]
+type = VarSet
+trigger1 = var(2) = 0
+v = 10
+value = 0
+
+[State -3, VarSet, Apariencia]
+type = VarSet
+trigger1 = var(2) = 1
+v = 11
+value = 1000
+
+[State -3, VarSet,Apariencia]
+type = VarSet
+trigger1 = var(2) = 0
+v = 11
+value = 0
+
+; Armas
+[State -3, VarSet, Golpeado]
+type = VarSet
+trigger1 = var(2) = 2
+v = 10
+value = 0
+
+[State -3, VarSet, Apariencia]
+type = VarSet
+trigger1 = var(2) = 2
+v = 11
+value = 0
+
+;===============================================================================
+; MANTENER IMAGEN DEL MODO ARMAS EN LA INTERFAZ DESPUÉS DE CAIDA:
+;-------------------------------------------------------------------------------
+[State 0, VarSet]
+type = VarSet
+triggerall = var(2) = 2
+trigger1 = var(7) != 1 && var(7) != 2 && var(7) != 3 && var(7) != 0
+v = 7    
+value = 0
+;===============================================================================
+; VARIABLES PARA COLOR DE PULSO DE VIDA:
+;-------------------------------------------------------------------------------
+; Verde
+[State 0, VarSet]
+type = VarSet
+trigger1 = life >= 1000
+v = 44
+value = 0
+
+;-------------------------------------------------------------------------------
+; Amarillo
+[State 0, VarSet]
+type = VarSet
+trigger1 = life < 1000 && life >= 200
+v = 44
+value = 1
+
+;-------------------------------------------------------------------------------
+; Rojo
+[State 0, VarSet]
+type = VarSet
+trigger1 = life < 200
+v = 44
+value = 2
+
+;===============================================================================
+; VARIABLES PARA COLOR DE ENERGÍA:
+;-------------------------------------------------------------------------------
+; Verde
+[State 0, VarSet]
+type = VarSet
+trigger1 = power >= 2000
+v = 45
+value = 0
+
+;-------------------------------------------------------------------------------
+; Amarillo
+[State 0, VarSet]
+type = VarSet
+trigger1 = power >= 1000 && power < 2000
+v = 45
+value = 1
+
+;-------------------------------------------------------------------------------
+; Rojo
+[State 0, VarSet]
+type = VarSet
+trigger1 = power >= 500 && power < 1000
+v = 45
+value = 2
+
+;-------------------------------------------------------------------------------
+; Vacío
+[State 0, VarSet]
+type = VarSet
+trigger1 = power < 500
+v = 45
+value = 3
+
+;-------------------------------------------------------------------------------
+; Sonidos Comunes:
+;-------------------------------------------------------------------------------
+[State 0, Andando]
+type = PlaySnd
+triggerall = stateno = 20
+trigger1 = animelem = 6
+value = S20,1
+
+[State 0, Saltando]
+type = PlaySnd
+triggerall = stateno = 40
+trigger1 = Time = 1
+value = S40,1
+volume = 55
+channel = -1
+
+[State 0, Super Jump]
+type = PlaySnd
+triggerall = stateno = 80
+trigger1 = Time = 1
+value = S60,1
+volume = 55
+channel = -1
+
+[State 0, Land]
+type = PlaySnd
+triggerall = stateno = 52
+trigger1 = time = 1
+value = S52,1
+volume = 50
+
+[State 0, Run]
+type = PlaySnd
+triggerall = stateno = 60||stateno = 70
+trigger1 = time = 1
+value = S40,2
+volume = 999
+
+[State 0, StopSnd]
+type = StopSnd
+TRIGGERALL = stateno != 3600 && stateno != 3601
+trigger1 = time = 1
+channel = 1
+
+[State 0, StopSnd]
+type = StopSnd
+TRIGGERALL = stateno != 3600 && stateno != 3601
+trigger1 = time = 1
+channel = 2
+
+[State 0, Golpeado]
+type = PlaySnd
+triggerall = stateno != [34988,34989]
+Triggerall = stateno != [3400,3499]
+trigger1 = movetype=H && (stateno!=[0,155]) && !time && HitOver=0 && random%3=0
+value = 5000,ifelse(random < 500,1,ifelse(random < 500,2,3))
+
+[State 0, Solucion Stand Aire]
+type = ChangeState
+triggerall = stateno = 0||stateno = 20
+trigger1 = pos y < 0
+value = 50
+ctrl = 1

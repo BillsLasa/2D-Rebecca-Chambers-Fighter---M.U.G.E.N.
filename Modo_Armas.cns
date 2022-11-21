@@ -1,0 +1,1333 @@
+;===============================================================================
+; Modo Armas:
+;---------------------------------------------------------------------------
+; Modo Armas - Start
+[Statedef 2000]
+type     = S
+movetype = A
+physics  = S
+anim = 2000
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 0
+
+[State 1011, AfterImage]
+type= AfterImage
+trigger1= time = 1
+time = 1000
+trans = add1
+length = 10
+paladd = 0,0,0
+palmul = 1,1,1
+palcontrast = 100,180,100
+palpostbright = 0,0,0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 2
+value = S1,1
+volume = 999
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = animtime = 0 
+v = 2
+value = 2
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Pistola (Beretta):
+;---------------------------------------------------------------------------
+; Pistola (Beretta):
+[StateDef 2200]
+type     = S
+movetype = A
+physics  = S
+anim = 2200
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 0
+
+[State 0, ChangeAnim]
+type = ChangeAnim
+triggerall = prevstateno = 2200
+trigger1 = time = 0
+value = 2200
+elem = 6
+
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 12
+v = 31
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = var(31) >= 9
+v = 31
+value = 9
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME = 17
+x = -1
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Pistola]
+type = Helper
+trigger1 = time = 12
+helpertype = normal
+name = "Bala Pistola"
+ID = 2201
+stateno = 2201
+pos = 54,-72
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, End]
+type = ChangeState
+triggerall = var(31) < 9
+Triggerall = time = [22,32]
+trigger1 = command = "a"
+value = 2200
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;---------------------------------------------------------------------------
+; Bala Pistola 
+[StateDef 2201]
+type     = S
+movetype = A
+physics  = S
+anim = 2201
+velset = 0,0
+sprpriority = 3
+ctrl = 0
+poweradd = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = TIME = 0
+value = S7,28
+volume = 999
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7012
+ID = 7012
+pos = 0,0
+postype = p1
+facing = 1
+vfacing = 1
+bindtime = 0
+removetime = -2
+scale = 0.2,0.2
+sprpriority = 9
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7019
+ID = 7019
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.2,0.2
+sprpriority = 8
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7007
+ID = 7007
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.3,0.3
+sprpriority = 10
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = 1 
+x = 30
+y = 0
+
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = unguardable
+
+[State 200, 1]
+type = HitDef
+triggerall = !movecontact
+trigger1 = 1
+attr = SCA, AP
+animtype  = HEAVY
+damage    = 20,10
+HITFLAG = MAFDE
+guardflag = MA
+pausetime = 0,5
+sparkno = -1
+guard.sparkno = s7000
+sparkxy = -3,-60
+hitsound   = -1
+guardsound = -1
+ground.type = High
+ground.slidetime = 12
+ground.hittime  = 15
+ground.velocity = -1,0
+air.velocity = -0.5,0
+envshake.time = 20
+Fall = 0
+Fall.recover = 1
+getpower = 0,0
+
+[State 200, Spark CVS]
+type = Explod
+triggerall = Numexplod(7018) = 0
+trigger1 = Movehit = 1
+anim = 7018
+ID = 7018
+postype = P1
+pos = -10+random%7,0
+facing = 1
+sprpriority = 6
+supermove = 1
+removetime = -2
+bindtime = 1
+ownpal = 1
+scale = 0.2,0.2
+removeongethit = 1
+ontop = 0
+supermovetime 	= 999
+ignorehitpause  = 1
+
+[State 200, Destroyself]
+type = Destroyself
+trigger1 = time = 10
+trigger2 = movecontact
+;---------------------------------------------------------------------------
+; Recargar Pistola (Beretta):
+[StateDef 2250]
+type     = S
+movetype = A
+physics  = S
+anim = 2250
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = animtime = 0
+v = 31
+value = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 0
+value = S7,29
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Escopeta (Shotgun):
+;---------------------------------------------------------------------------
+; Escopeta (Shotgun):
+[StateDef 2300]
+type     = S
+movetype = A
+physics  = S
+anim = 2300
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 1
+
+[State 0, ChangeAnim]
+type = ChangeAnim
+triggerall = prevstateno = 2300
+trigger1 = time = 0
+value = 2300
+elem = 6
+
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 12
+v = 32
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = var(32) >= 9
+v = 32
+value = 9
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME = 17
+x = -1
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Escopeta]
+type = Helper
+trigger1 = time = 12
+helpertype = normal
+name = "Bala Escopeta"
+ID = 2301
+stateno = 2301
+pos = 64,-72
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, End]
+type = ChangeState
+triggerall = var(32) < 6
+Triggerall = time = [42,52]
+trigger1 = command = "b"
+value = 2300
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;---------------------------------------------------------------------------
+; Bala Escopeta 
+[StateDef 2301]
+type     = S
+movetype = A
+physics  = S
+anim = 2201
+velset = 0,0
+sprpriority = 3
+ctrl = 0
+poweradd = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = TIME = 0
+value = S7,30
+volume = 999
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7012
+ID = 7012
+pos = 0,0
+postype = p1
+facing = 1
+vfacing = 1
+bindtime = 0
+removetime = -2
+scale = 0.2,0.2
+sprpriority = 9
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7019
+ID = 7019
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.2,0.2
+sprpriority = 8
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7007
+ID = 7007
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.3,0.3
+sprpriority = 10
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = 1 
+x = 30
+y = 0
+
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = unguardable
+
+[State 200, 1]
+type = HitDef
+triggerall = !movecontact
+trigger1 = 1
+attr = SCA, AP
+animtype  = HEAVY
+damage    = 50,40
+HITFLAG = MAFDE
+guardflag = MA
+pausetime = 0,10
+sparkno = -1
+guard.sparkno = s7000
+sparkxy = -3,-60
+hitsound   = -1
+guardsound = -1
+ground.type = High
+ground.slidetime = 12
+ground.hittime  = 15
+ground.velocity = -1.5,0
+air.velocity = -0.75,0
+envshake.time = 40
+Fall = 0
+Fall.recover = 1
+getpower = 0,0
+
+[State 200, Spark CVS]
+type = Explod
+triggerall = Numexplod(7018) = 0
+trigger1 = Movehit = 1
+anim = 7018
+ID = 7018
+postype = P1
+pos = -10+random%7,0
+facing = 1
+sprpriority = 6
+supermove = 1
+removetime = -2
+bindtime = 1
+ownpal = 1
+scale = 0.35,0.35
+removeongethit = 1
+ontop = 0
+supermovetime 	= 999
+ignorehitpause  = 1
+
+[State 200, Destroyself]
+type = Destroyself
+trigger1 = time = 10
+trigger2 = movecontact
+;---------------------------------------------------------------------------
+; Recargar Escopeta (Shotgun):
+[StateDef 2350]
+type     = S
+movetype = A
+physics  = S
+anim = 2350
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = animtime = 0
+v = 32
+value = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = timemod = 20,0
+value = S7,31
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Ametralladora:
+;---------------------------------------------------------------------------
+; Ametralladora:
+[StateDef 2400]
+type     = S
+movetype = A
+physics  = S
+anim = 2400
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 2
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME >= 11
+x = -0.05
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Ametralladora]
+type = Helper
+triggerall = time >= 11
+trigger1 = timemod = 5,0
+helpertype = normal
+name = "Bala Ametralladora"
+ID = 2401
+stateno = 2401
+pos = 52,-74
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, ChangeState]
+type = ChangeState
+TRIGGER1 = VAR(33) >= 100
+TRIGGER2 = command != "hold_c"
+value = 0
+ctrl = 1
+;---------------------------------------------------------------------------
+; Bala Ametralladora 
+[StateDef 2401]
+type     = S
+movetype = A
+physics  = S
+anim = 2201
+velset = 0,0
+sprpriority = 3
+ctrl = 0
+poweradd = 0
+
+[State 0, VarSet]
+type = ParentVaradd
+trigger1 = time = 0
+v = 33
+value = 1
+
+[State 0, VarSet]
+type = ParentVarSet
+trigger1 = var(33) >= 100
+v = 33
+value = 100
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = TIME = 0
+value = S7,32
+volume = 999
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7012
+ID = 7012
+pos = 0,0
+postype = p1
+facing = 1
+vfacing = 1
+bindtime = 0
+removetime = -2
+scale = 0.1,0.1
+sprpriority = 9
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7019
+ID = 7019
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.1,0.1
+sprpriority = 8
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7007
+ID = 7007
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.15,0.15
+sprpriority = 10
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = 1 
+x = 30
+y = 0
+
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = unguardable
+
+[State 200, 1]
+type = HitDef
+triggerall = !movecontact
+trigger1 = 1
+attr = SCA, AP
+animtype  = HEAVY
+damage    = 2,1
+HITFLAG = MAFDE
+guardflag = MA
+pausetime = 0,5
+sparkno = -1
+guard.sparkno = s7000
+sparkxy = -3,-60
+hitsound   = -1
+guardsound = -1
+ground.type = High
+ground.slidetime = 12
+ground.hittime  = 15
+ground.velocity = 0,0
+air.velocity = 0,0
+envshake.time = 5
+Fall = 0
+Fall.recover = 1
+getpower = 0,0
+
+[State 200, Spark CVS]
+type = Explod
+triggerall = Numexplod(7018) = 0
+trigger1 = Movehit = 1
+anim = 7018
+ID = 7018
+postype = P1
+pos = -15+random%7,0
+facing = 1
+sprpriority = 6
+supermove = 1
+removetime = -2
+bindtime = 1
+ownpal = 1
+scale = 0.2,0.2
+removeongethit = 1
+ontop = 0
+supermovetime 	= 999
+ignorehitpause  = 1
+
+[State 200, Destroyself]
+type = Destroyself
+trigger1 = time = 16
+trigger2 = movecontact
+;---------------------------------------------------------------------------
+; Recargar Ametralladora:
+[StateDef 2450]
+type     = S
+movetype = A
+physics  = S
+anim = 2250
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = animtime = 0
+v = 33
+value = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 0
+value = S7,33
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Magnum (Anaconda):
+;---------------------------------------------------------------------------
+; Magnum (Anaconda):
+[StateDef 2520]
+type     = S
+movetype = A
+physics  = S
+anim = 2500
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 3
+
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 12
+v = 34
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = var(34) >= 1
+v = 34
+value = 1
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME = 17
+x = -3
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Magnum]
+type = Helper
+trigger1 = time = 12
+helpertype = normal
+name = "Bala Magnum"
+ID = 2521
+stateno = 2521
+pos = 44,-72
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;---------------------------------------------------------------------------
+; Bala Magnum 
+[StateDef 2521]
+type     = S
+movetype = A
+physics  = S
+anim = 2501
+velset = 0,0
+sprpriority = 3
+ctrl = 0
+poweradd = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = TIME = 0
+value = S7,34
+volume = 999
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7012
+ID = 7012
+pos = 0,0
+postype = p1
+facing = 1
+vfacing = 1
+bindtime = 0
+removetime = -2
+scale = 0.2,0.2
+sprpriority = 9
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7019
+ID = 7019
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.2,0.2
+sprpriority = 8
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, Explod]
+type = Explod
+trigger1 = time = 0
+anim = 7007
+ID = 7007
+pos = 0,0
+postype = p1
+facing = -1
+vfacing = -1
+bindtime = 0
+removetime = -2
+scale = 0.3,0.3
+sprpriority = 10
+ontop = 0
+shadow = 0,0,0
+ownpal = 1
+removeongethit = 0
+ignorehitpause = 1
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = 1 
+x = 30
+y = 0
+
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = unguardable
+
+[State 200, 1]
+type = HitDef
+triggerall = !movecontact
+trigger1 = 1
+attr = SCA, AP
+animtype  = HEAVY
+damage    = 400,390
+HITFLAG = MAFDE
+guardflag = MA
+pausetime = 0,10
+sparkno = -1
+guard.sparkno = s7000
+sparkxy = -3,-60
+hitsound   = -1
+guardsound = -1
+ground.type = High
+ground.slidetime = 12
+ground.hittime  = 15
+ground.velocity = -3,0
+air.velocity = -1.5,0
+envshake.time = 40
+Fall = 0
+Fall.recover = 0
+getpower = 0,0
+
+[State 200, Spark CVS]
+type = Explod
+triggerall = Numexplod(7018) = 0
+trigger1 = Movehit = 1
+anim = 7018
+ID = 7018
+postype = P1
+pos = -10+random%7,0
+facing = 1
+sprpriority = 6
+supermove = 1
+removetime = -2
+bindtime = 1
+ownpal = 1
+scale = 0.7,0.7
+removeongethit = 1
+ontop = 0
+supermovetime 	= 999
+ignorehitpause  = 1
+
+[State 200, Destroyself]
+type = Destroyself
+trigger1 = time = 12
+;---------------------------------------------------------------------------
+; Recargar Ametralladora:
+[StateDef 2550]
+type     = S
+movetype = A
+physics  = S
+anim = 2550
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = animtime = 0
+v = 34
+value = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = timemod = 60,0
+value = S7,35
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Pistola Aire(Beretta):
+;---------------------------------------------------------------------------
+; Pistola Aire(Beretta):
+[StateDef 2600]
+type     = A
+movetype = A
+physics  = A
+anim = 2205
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME >= 0 
+y = 1.8
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 0
+
+[State 0, ChangeAnim]
+type = ChangeAnim
+triggerall = prevstateno = 2600
+trigger1 = time = 0
+value = 2205
+elem = 6
+
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 12
+v = 31
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = var(31) >= 9
+v = 31
+value = 9
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME = 17
+x = -1
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Pistola]
+type = Helper
+trigger1 = time = 12
+helpertype = normal
+name = "Bala Pistola"
+ID = 2201
+stateno = 2201
+pos = 54,-62
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, End]
+type = ChangeState
+triggerall = pos y < 0
+triggerall = var(31) < 9
+Triggerall = time = [22,32]
+trigger1 = command = "a"
+value = 2600
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Escopeta Aire(Shotgun):
+;---------------------------------------------------------------------------
+; Escopeta Aire(Shotgun):
+[StateDef 2610]
+type     = A
+movetype = A
+physics  = A
+anim = 2305
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME >= 0 
+y = 1.8
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 1
+
+[State 0, ChangeAnim]
+type = ChangeAnim
+triggerall = prevstateno = 2610
+trigger1 = time = 0
+value = 2305
+elem = 6
+
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 12
+v = 32
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = var(32) >= 9
+v = 32
+value = 9
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME = 17
+x = -1
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Escopeta]
+type = Helper
+trigger1 = time = 12
+helpertype = normal
+name = "Bala Escopeta"
+ID = 2301
+stateno = 2301
+pos = 64,-62
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, End]
+type = ChangeState
+triggerall = pos y < 0
+triggerall = var(32) < 6
+Triggerall = time = [42,52]
+trigger1 = command = "b"
+value = 2610
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Ametralladora Aire:
+;---------------------------------------------------------------------------
+; Ametralladora Aire:
+[StateDef 2620]
+type     = A
+movetype = A
+physics  = A
+anim = 2405
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME >= 0 
+y = 1.8
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 2
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME >= 11
+x = -0.05
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Ametralladora]
+type = Helper
+triggerall = time >= 11
+trigger1 = timemod = 5,0
+helpertype = normal
+name = "Bala Ametralladora"
+ID = 2401
+stateno = 2401
+pos = 52,-70
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, ChangeState]
+type = ChangeState
+TRIGGER1 = VAR(33) >= 100
+TRIGGER2 = command != "hold_c"
+trigger3 = pos y >= 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Magnum Aire(Anaconda):
+;---------------------------------------------------------------------------
+; Magnum Aire(Anaconda):
+[StateDef 2630]
+type     = A
+movetype = A
+physics  = A
+anim = 2505
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 5
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME >= 0 
+y = 1.8
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = time = 0
+v = 7  
+value = 3
+
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 12
+v = 34
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+trigger1 = var(34) >= 1
+v = 34
+value = 1
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = TIME = 17
+x = -2
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 8
+value = S8500,10 
+
+[State 0, Bala Magnum]
+type = Helper
+trigger1 = time = 12
+helpertype = normal
+name = "Bala Magnum"
+ID = 2521
+stateno = 2521
+pos = 44,-62
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 1
+pausemovetime = 1
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+;===============================================================================
+; Cambiar Arma:
+;---------------------------------------------------------------------------
+; Cambiar Arma:
+[StateDef 2800]
+type     = S
+movetype = A
+physics  = S
+anim = 2808
+velset = 0,0
+sprpriority = 2
+ctrl = 0
+poweradd = 0
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = time = 0
+value = S7,36
+volume = 999
+
+[State 0, VarSet]
+type = VarSet
+triggerall = time = 0
+trigger1 = var(7) = 0
+v = 8    
+value = 0
+
+[State 0, VarSet]
+type = VarSet
+triggerall = time = 0
+trigger1 = var(7) = 1
+v = 8    
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+triggerall = time = 0
+trigger1 = var(7) = 2
+v = 8    
+value = 2
+
+[State 0, VarSet]
+type = VarSet
+triggerall = time = 0
+trigger1 = var(7) = 3
+v = 8    
+value = 3
+
+[State 0, VarSet]
+type = VarSet
+triggerall = var(8) = 3
+trigger1 = animtime = 0
+v = 7  
+value = 0
+
+[State 0, VarSet]
+type = VarSet
+triggerall = var(8) = 0
+trigger1 = animtime = 0
+v = 7  
+value = 1
+
+[State 0, VarSet]
+type = VarSet
+triggerall = var(8) = 1
+trigger1 = animtime = 0
+v = 7  
+value = 2
+
+[State 0, VarSet]
+type = VarSet
+triggerall = var(8) = 2
+trigger1 = animtime = 0
+v = 7  
+value = 3
+
+[State 200, ChangeState]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1

@@ -1,0 +1,25 @@
+[Info]
+name = "Rebecca Chambers"
+displayname = "Rebecca"
+versiondate = 10/04/2020
+mugenversion = 1.0 
+author = "BillsDios"
+pal.defaults =1
+
+[Files]
+sprite=Rebecca.sff
+sound=Rebecca.snd
+anim=Rebecca.air
+cmd=Rebecca.cmd
+cns=Rebecca.cns
+st=Rebecca.cns
+stcommon=common1.cns
+pal1=1.act
+;pal2=2.act
+st1=Modo_Golpes.cns
+st2=Modo_Cuchillo.cns
+st3=Modo_Armas.cns
+st4=General.cns
+[Arcade]
+intro.storyboard=
+ending.storyboard=
