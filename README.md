@@ -6,7 +6,7 @@ A 2D fighter based on Rebecca Chambers from Resident Evil Saga. Functional for t
 
     -[LinkedIn](https://www.linkedin.com/in/sanchezluismachinelearning/)
     
-    -[YouTube](https://www.youtube.com/channel/UC8X14gUHqfZUegbtFXrhivw)
+    -[YouTube](https://www.youtube.com/@billsdios)
   
 * **Armin_iuf** -> Original Rebecca sprites creator and editor
 
